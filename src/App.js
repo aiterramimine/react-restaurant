@@ -83,8 +83,7 @@ class App extends Component {
 								 key={index} 
                  removeHobby={this.removeHobby.bind(this)} 
 								 />
-			}
-    );
+			});
     
     return (
       <div className="App">

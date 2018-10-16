@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
+import Restaurant from './components/Restaurant'
 
 class RestaurantsCatalog extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            restaurants: ['McDonalds', 'Kfc']
+            restaurants: []
         }
     }
 
@@ -16,6 +17,10 @@ class RestaurantsCatalog extends React.Component {
 
     componentWillUnmount() {
 
+    }
+
+    removeRestaurant(restaurantName) {
+        console.log('Removing the restaurant' + restaurantName);
     }
 
     getDataFromServer() {
@@ -41,6 +46,10 @@ class RestaurantsCatalog extends React.Component {
             });
     }
 
+    removeRestaurant() {
+        
+    }
+
     render() {
         
         console.log('Render');
@@ -50,16 +59,61 @@ class RestaurantsCatalog extends React.Component {
             }
         );
         
+        let restos =
+            this.state.restaurants.map((el, index) => {
+                return <Restaurant
+                    name={el.name}
+                    key={index}
+                    index={index}
+                    cuisine={el.cuisine}
+                    removeRestaurant = {this.removeRestaurant.bind(this)}
+                    />
+            });
+
         return (
             <div className="App">
-                <h3>Liste des restaurants: </h3>
-                <input
-                    type="text"
-                    ref={(input) => {this.input = input}}
-                />
-                <ul>
-                    {list}
-                </ul>
+                
+                <div class="container">
+
+                    <div class="row">
+                            <h3>Liste des restaurants : </h3>
+                    </div>                
+                    <div class="row">
+                        <button>Add Restaurant</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <input
+                                    type="text"
+                                    ref={(input) => {this.input = input}}
+                                    />
+                            </div>            
+                            <div class="row">
+                                <table class="table col-sm-8">
+
+                                    <thead class="black white-text">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Cuisine</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {restos}
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            This is the form for adding a new restaurant.
+                        </div>
+                    </div>
+                </div>
+
             </div>
         );
     }
