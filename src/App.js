@@ -67,7 +67,7 @@ class App extends Component {
     // on a fait avec VueJS
     this.getDataFromServer();
   }
-  
+     
   render() {
     console.log("render");
     let list = this.state.hobbies.map(

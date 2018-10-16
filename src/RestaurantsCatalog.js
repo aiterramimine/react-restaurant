@@ -42,9 +42,24 @@ class RestaurantsCatalog extends React.Component {
     }
 
     render() {
+        
+        console.log('Render');
+        let list = this.state.restaurants.map(
+            (el) => {
+                return <li>{el.name}</li>
+            }
+        );
+        
         return (
-            <div classname="App">
-                <p>Hello world</p>
+            <div className="App">
+                <h3>Liste des restaurants: </h3>
+                <input
+                    type="text"
+                    ref={(input) => {this.input = input}}
+                />
+                <ul>
+                    {list}
+                </ul>
             </div>
         );
     }
