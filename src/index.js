@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import RestaurantsCatalog from './RestaurantsCatalog';
 
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<RestaurantsCatalog />, document.getElementById('root'));
 
 registerServiceWorker();
