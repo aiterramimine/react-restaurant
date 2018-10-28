@@ -8,6 +8,8 @@ class RestaurantsCatalog extends React.Component {
         this.state = {
             restaurants: []
         }
+        this.handleFetchPage = this.handleFetchPage.bind(this);
+        this.handleFetchRestaurantByName = this.handleFetchRestaurantByName.bind(this);
     }
 
     componentWillMount() {
@@ -23,9 +25,9 @@ class RestaurantsCatalog extends React.Component {
         console.log('Removing the restaurant' + restaurantName);
     }
 
-    getDataFromServer() {
+    getDataFromServer(page, name) {
         console.log('--- GETTING DATA ---');
-        fetch('http://localhost:8080/api/restaurants?pagesize=10')
+        fetch('http://localhost:8080/api/restaurants?page=' + page + (name ? '&name=' + name : ''))
             .then(response => {
                 return response.json();
             })
@@ -46,20 +48,36 @@ class RestaurantsCatalog extends React.Component {
             });
     }
 
-    removeRestaurant() {
-        
+    removeRestaurant(id) {
+        console.log('Removing restaurant of id: ' + id);
+        fetch('http://localhost:8080/api/restaurants/' + id, {
+            method: 'DELETE'
+        }).then(res => {
+            this.getDataFromServer();
+        });
     }
 
     handleAddRestaurant(event) {
         event.preventDefault();
 
         const data = new FormData(event.target);
-        console.log(data);
         fetch('http://localhost:8080/api/restaurants', {
             method: 'POST',
             body: data
         });
 
+    }
+
+    handleFetchPage(event) {
+        if(event.which == 13) {
+            let num = document.querySelector('#page-number').value;
+            this.getDataFromServer(num)
+        }
+    }
+
+    handleFetchRestaurantByName(event) {
+            let name = document.querySelector("#restaurant-name").value;
+            this.getDataFromServer(null, name);
     }
 
     render() {
@@ -78,6 +96,7 @@ class RestaurantsCatalog extends React.Component {
                     key={index}
                     index={index}
                     cuisine={el.cuisine}
+                    id={el._id}
                     removeRestaurant = {this.removeRestaurant.bind(this)}
                     />
             });
@@ -94,17 +113,21 @@ class RestaurantsCatalog extends React.Component {
                     <div class="row">
                         <div class="col-sm-8">
                             <div class="row">
+                                <label>Recherchez les restaurants par nom pas besoin d'appuier sur entrer: </label>
+                            </div>
+                            <div class="row">
                                 <input
                                     type="text"
-                                    ref={(input) => {this.input = input}}
+                                    id="restaurant-name"
+                                    onKeyUp={this.handleFetchRestaurantByName}
                                     />
-                            </div>            
+                            </div>
+                                
                             <div class="row">
                                 <table class="table col-sm-8">
 
                                     <thead class="black white-text">
                                         <tr>
-                                            <th scope="col">#</th>
                                             <th scope="col">Name</th>
                                             <th scope="col">Cuisine</th>
                                             <th scope="col">Actions</th>
@@ -132,6 +155,8 @@ class RestaurantsCatalog extends React.Component {
                             </form>
                         </div>
                     </div>
+                    <label>Veuillez entrer le numéro de la page puis appuiez sur entrer: </label><br/>
+                    <input id="page-number" type="number" onKeyPress={this.handleFetchPage}></input>
                 </div>
 
             </div>
