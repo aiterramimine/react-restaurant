@@ -25,7 +25,7 @@ class RestaurantsCatalog extends React.Component {
 
     getDataFromServer() {
         console.log('--- GETTING DATA ---');
-        fetch('http://localhost:8080/api/restaurants')
+        fetch('http://localhost:8080/api/restaurants?pagesize=10')
             .then(response => {
                 return response.json();
             })
@@ -48,6 +48,18 @@ class RestaurantsCatalog extends React.Component {
 
     removeRestaurant() {
         
+    }
+
+    handleAddRestaurant(event) {
+        event.preventDefault();
+
+        const data = new FormData(event.target);
+        console.log(data);
+        fetch('http://localhost:8080/api/restaurants', {
+            method: 'POST',
+            body: data
+        });
+
     }
 
     render() {
@@ -78,9 +90,7 @@ class RestaurantsCatalog extends React.Component {
                     <div class="row">
                             <h3>Liste des restaurants : </h3>
                     </div>                
-                    <div class="row">
-                        <button>Add Restaurant</button>
-                    </div>
+
                     <div class="row">
                         <div class="col-sm-8">
                             <div class="row">
@@ -97,6 +107,7 @@ class RestaurantsCatalog extends React.Component {
                                             <th scope="col">#</th>
                                             <th scope="col">Name</th>
                                             <th scope="col">Cuisine</th>
+                                            <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
 
@@ -109,7 +120,16 @@ class RestaurantsCatalog extends React.Component {
                         </div>
 
                         <div class="col-sm-4">
-                            This is the form for adding a new restaurant.
+                            <form >
+                                <div class="from-group">
+                                    <form onSubmit={this.handleAddRestaurant}>
+                                        <input id="nom" name="nom" type="text" placeholder="Amine's restaurant" />
+                                        <input id="cuisine" name="cuisine" type="text" placeholder="Amine's cuisine" />
+                                        <br/>
+                                        <button>Créer restaurant</button>
+                                    </form>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
